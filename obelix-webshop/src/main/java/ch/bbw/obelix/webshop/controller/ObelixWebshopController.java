@@ -43,7 +43,7 @@ public class ObelixWebshopController {
 	public MenhirDto getMenhirById(@PathVariable UUID menhirId) {
 		return menhirRepository.findById(menhirId)
 				.map(MenhirEntity::toDto)
-				.orElseThrow(() -> new UnknownMenhirException("unknwon menhir with id " + menhirId));
+				.orElseThrow(() -> new UnknownMenhirException("unknown menhir with id " + menhirId));
 	}
 
 	/**
