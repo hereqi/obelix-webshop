@@ -3,10 +3,9 @@ package ch.bbw.obelix.webshop.controller;
 import java.util.List;
 import java.util.UUID;
 
+import ch.bbw.obelix.quarry.api.QuarryApi;
+import ch.bbw.obelix.quarry.api.dto.MenhirDto;
 import ch.bbw.obelix.webshop.dto.BasketDto;
-import ch.bbw.obelix.webshop.dto.MenhirDto;
-import ch.bbw.obelix.webshop.entity.MenhirEntity;
-import ch.bbw.obelix.webshop.repository.MenhirRepository;
 import ch.bbw.obelix.webshop.service.ObelixWebshopService;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.StandardException;
@@ -26,7 +25,7 @@ public class ObelixWebshopController {
 
 	private final ObelixWebshopService obelixWebshopService;
 
-	private final MenhirRepository menhirRepository;
+	private final QuarryApi quarryClient;
 
 	@GetMapping("/api")
 	public String welcome() {
@@ -35,15 +34,12 @@ public class ObelixWebshopController {
 
 	@GetMapping("/api/menhirs")
 	public List<MenhirDto> getAllMenhirs() {
-		return menhirRepository.findAll()
-				.stream().map(MenhirEntity::toDto).toList();
+		return quarryClient.getAllMenhirs();
 	}
 
 	@GetMapping("/api/menhirs/{menhirId}")
 	public MenhirDto getMenhirById(@PathVariable UUID menhirId) {
-		return menhirRepository.findById(menhirId)
-				.map(MenhirEntity::toDto)
-				.orElseThrow(() -> new UnknownMenhirException("unknown menhir with id " + menhirId));
+		return quarryClient.getMenhirById(menhirId);
 	}
 
 	/**
@@ -52,7 +48,7 @@ public class ObelixWebshopController {
 	 */
 	@DeleteMapping("/api/quarry/{menhirId}")
 	public void deleteById(@PathVariable UUID menhirId) {
-		menhirRepository.deleteById(menhirId);
+		quarryClient.deleteById(menhirId);
 	}
 
 	/**
